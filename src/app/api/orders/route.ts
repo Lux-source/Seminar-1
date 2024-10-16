@@ -14,6 +14,7 @@ export async function POST(
   const { userId } = params;
   const data  = await request.json();
 
+  //Validar userId
 if (!Types.ObjectId.isValid(userId)) {
   return NextResponse.json(
     {
@@ -26,6 +27,7 @@ if (!Types.ObjectId.isValid(userId)) {
 
   const { address, cardHolder, cardNumber} = data;
 
+  // Validate order details
   if (!address || !cardHolder || !cardNumber) {
     return NextResponse.json(
       {
@@ -48,5 +50,11 @@ if (!Types.ObjectId.isValid(userId)) {
     );
   }
 
-  return NextResponse.json(order, {status: 201});
+  // Include Location header in the response
+  return NextResponse.json(order, {
+  status: 201,
+  headers: {
+    Location: `/api/users/${userId}/orders/${order.orderId}`,
+  },
+});
 }

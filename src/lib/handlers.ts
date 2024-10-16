@@ -1,6 +1,6 @@
 import Products, { Product } from '@/models/Product';
 import Users, { User, CartItem } from '@/models/User';
-import Orders, {OrderItem} from '@/models/Order'
+import Orders, {OrderItem, Order} from '@/models/Order'
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 
@@ -171,20 +171,17 @@ export async function createOrder(
     select: 'name price',
   });
 
-  if (!user){
+  if (!user || user.cartItems.length === 0){
     return null;
   }
 
-  if (user.cartItems.length === 0){
-    return null;
-  }
-
+ // Transform cart items into order items
   const orderItems: OrderItem[] = user.cartItem.map((cartItem) => ({
     product: cartItem.product._id,
     qty: cartItem.qty,
   }));
 
-
+ // Create a new order
   const newOrder = await Orders.create({
     userId: user._id,
     orderItems: orderItems,
@@ -194,10 +191,34 @@ export async function createOrder(
     cardNumer: orderData.cardNumber,
   });
 
+
+ // Clear user's cart and save order reference (Mirar por que borro)
   user.cartItems = [];
   user.orders.push(newOrder._id);
   
   await user.save();
 
   return { orderId: newOrder._id };
+}
+
+
+export interface GetOrderResponse extends Order {
+  _id: Types.ObjectId;
+}
+
+export async function getOrder(
+  userId: Types.ObjectId | string,
+  orderId: Types.ObjectId | string
+): Promise<GetOrderResponse | null> {
+  await connect();
+
+  const order = await Orders.findOne({
+    _id: orderId,
+    userId: userId,
+  }).populate({
+    path: 'orderItems.product',
+    select: 'name price img description',
+  });
+
+  return order;
 }
