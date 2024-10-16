@@ -20,7 +20,7 @@ const OrderSchema = new Schema<Order>({
     orderItems: [
       {
         _id: false,
-        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true},
+        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true}, //Otra opcion import Product arriba y poner ref: Products
         qty: { type: Number, required: true, min: 1},
       },
     ],

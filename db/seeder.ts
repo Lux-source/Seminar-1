@@ -1,3 +1,4 @@
+import { Order } from '@/models/Order';
 import Products, { Product } from '@/models/Product';
 import Users, { User } from '@/models/User';
 import dotenv from 'dotenv';
@@ -5,6 +6,10 @@ import mongoose from 'mongoose';
 
 dotenv.config({ path: `.env.local`, override: true });
 const MONGODB_URI = process.env.MONGODB_URI;
+
+const order: Order[] = [
+  
+]
 
 const products: Product[] = [
   {

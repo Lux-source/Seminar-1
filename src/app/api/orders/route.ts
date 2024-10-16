@@ -11,11 +11,12 @@ export async function POST(
   request: NextRequest,
   { params }: { params : { userId: string } }
 ): Promise<NextResponse<CreateOrderResponse | ErrorResponse>>{
-  const { userId } = params;
-  const data  = await request.json();
+// Extract userId from the query parameters
+  const { searchParams } = new URL(request.url);
+  const userId  = searchParams.get('userId');
 
-  //Validar userId
-if (!Types.ObjectId.isValid(userId)) {
+    //Validar userId
+if (!userId || !Types.ObjectId.isValid(userId)) {
   return NextResponse.json(
     {
       error: 'WRONG_PARAMS',
@@ -24,6 +25,8 @@ if (!Types.ObjectId.isValid(userId)) {
     { status: 400}
   );
 }
+
+  const data  = await request.json();
 
   const { address, cardHolder, cardNumber} = data;
 

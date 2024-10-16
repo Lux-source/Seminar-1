@@ -167,7 +167,7 @@ export async function createOrder(
   await connect();
 
   const user = await Users.findById(userId).populate({
-    path: 'cartItem.product',
+    path: 'cartItems.product',
     select: 'name price',
   });
 
@@ -176,7 +176,7 @@ export async function createOrder(
   }
 
  // Transform cart items into order items
-  const orderItems: OrderItem[] = user.cartItem.map((cartItem) => ({
+  const orderItems: OrderItem[] = user.cartItems.map((cartItem) => ({
     product: cartItem.product._id,
     qty: cartItem.qty,
   }));
@@ -188,7 +188,7 @@ export async function createOrder(
     address: orderData.address,
     date: new Date(),
     cardHolder: orderData.cardHolder,
-    cardNumer: orderData.cardNumber,
+    cardNumber: orderData.cardNumber,
   });
 
 
