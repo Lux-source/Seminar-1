@@ -1,5 +1,6 @@
 import Products, { Product } from '@/models/Product';
-import Users, { User } from '@/models/User';
+import Users, { User, CartItem } from '@/models/User';
+import Orders, {OrderItem, Order} from '@/models/Order'
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import Orders, { Order } from '@/models/Order';
@@ -23,6 +24,7 @@ export async function getOrders():Promise<GetOrderResponse>{
 
   
 }
+
 
 export interface GetProductsResponse {
   products: (Product | { _id: Types.ObjectId })[]
@@ -100,4 +102,275 @@ export async function getUser(
   const user = await Users.findById(userId, userProjection)
 
   return user
+}
+
+export interface GetUserCartResponse {
+  cartItems: CartItem[];
+}
+
+export async function getUserCart(
+  userId: Types.ObjectId | string
+): Promise<GetUserCartResponse | null>{
+  await connect();
+
+  const user = await Users.findById(userId, {cartItems: true}).populate({
+    path: 'cartItems.product', 
+    select: 'name price img description',
+  });
+
+
+  if (!user){
+    return null;
+  }
+
+  return {cartItems: user.cartItems};
+}
+
+export interface AddProductToCartResponse {
+  cartItems: CartItem[];
+}
+
+export async function AddProductToCart(
+  userId: Types.ObjectId | string, 
+  productId: Types.ObjectId | string,
+  qty: number
+): Promise<AddProductToCartResponse | null>{
+  await connect();
+
+  const user = await Users.findById(userId);
+  if (!user){
+    return null;
+  }
+
+  const productExists = await Products.exists({
+    _id: productId
+  });
+  
+  if(!productExists){
+    return null;
+  }
+
+  const existingCartItemIndex = user.cartItems.findIndex(
+    (item) => item.product.toString() === productId.toString()
+  );
+
+
+  if (existingCartItemIndex !== -1){
+    user.cartItems[existingCartItemIndex].qty += qty;
+  } else {
+    user.cartItems.push({
+      product: new Types.ObjectId(productId),
+      qty: qty,
+    });
+  }
+
+  await user.save();
+
+  return { cartItems: user.cartItems};
+
+}
+
+
+export interface OrderData{
+  address: string;
+  cardHolder: string;
+  cardNumber: string;
+}
+
+export interface CreateOrderResponse{
+  orderId: Types.ObjectId;
+}
+
+export async function createOrder(
+  userId: Types.ObjectId | string,
+  orderData: OrderData
+): Promise<CreateOrderResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId).populate({
+    path: 'cartItems.product',
+    select: 'name price',
+  });
+
+  if (!user || user.cartItems.length === 0) {
+    return null;
+  }
+
+  // Transform cart items into order items with price
+  const orderItems: OrderItem[] = user.cartItems.map((cartItem) => ({
+    product: cartItem.product._id,
+    qty: cartItem.qty,
+    price: cartItem.product.price, // Include price at the time of purchase
+  }));
+
+  // Create a new order
+  const newOrder = await Orders.create({
+    userId: user._id,
+    orderItems: orderItems,
+    address: orderData.address,
+    date: new Date(),
+    cardHolder: orderData.cardHolder,
+    cardNumber: orderData.cardNumber,
+  });
+
+  // Clear user's cart and save the order reference
+  user.cartItems = [];
+  user.orders.push(newOrder._id);
+  await user.save();
+
+  return { orderId: newOrder._id };
+}
+
+
+export interface GetOrderResponse extends Order {
+  _id: Types.ObjectId;
+}
+
+export async function getOrder(
+  userId: Types.ObjectId | string,
+  orderId: Types.ObjectId | string
+): Promise<GetOrderResponse | null> {
+  await connect();
+
+  const order = await Orders.findOne({
+    _id: orderId,
+    userId: userId,
+  }).populate({
+    path: 'orderItems.product',
+    select: 'name price img description',
+  });
+
+  return order;
+}
+
+export async function getOrderById(
+  orderId: Types.ObjectId | string
+): Promise<GetOrderResponse | null> {
+  await connect();
+
+  const order = await Orders.findById(orderId).populate({
+    path: 'orderItems.product',
+    select: 'name price img description',
+  });
+
+  return order;
+}
+
+export interface GetUserOrdersResponse {
+  orders: {
+    _id: Types.ObjectId;
+    address: string;
+    date: Date;
+    cardHolder: string;
+    cardNumber: string;
+    orderItems: OrderItem[];
+  }[];
+}
+
+export async function getUserOrders(
+  userId: Types.ObjectId | string
+): Promise<GetUserOrdersResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId).populate({
+    path: 'orders',
+    select: '-__v',
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return { orders: user.orders as any }; // Type casting as any for simplicity
+}
+
+export interface UpdateCartItemResponse extends GetUserCartResponse {
+  newItem?: boolean;
+}
+
+export async function updateCartItem(
+  userId: Types.ObjectId | string,
+  productId: Types.ObjectId | string,
+  qty: number
+): Promise<UpdateCartItemResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId);
+
+  if (!user) {
+    return null;
+  }
+
+  const productExists = await Products.exists({ _id: productId });
+
+  if (!productExists) {
+    return null;
+  }
+
+  const existingCartItemIndex = user.cartItems.findIndex(
+    (item) => item.product.toString() === productId.toString()
+  );
+
+  let newItem = false;
+
+  if (existingCartItemIndex !== -1) {
+    user.cartItems[existingCartItemIndex].qty = qty;
+  } else {
+    user.cartItems.push({
+      product: new Types.ObjectId(productId),
+      qty: qty,
+    });
+    newItem = true;
+  }
+
+  await user.save();
+
+  // Populate cart items
+  await user.populate({
+    path: 'cartItems.product',
+    select: 'name price img description',
+  });
+
+  return { cartItems: user.cartItems, newItem };
+}
+
+export async function deleteCartItem(
+  userId: Types.ObjectId | string,
+  productId: Types.ObjectId | string
+): Promise<GetUserCartResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId);
+
+  if (!user) {
+    return null;
+  }
+
+  user.cartItems = user.cartItems.filter(
+    (item) => item.product.toString() !== productId.toString()
+  );
+
+  await user.save();
+
+  // Populate cart items
+  await user.populate({
+    path: 'cartItems.product',
+    select: 'name price img description',
+  });
+
+  return { cartItems: user.cartItems };
+}
+
+export interface GetProductResponse extends Product {
+  _id: Types.ObjectId;
+}
+
+export async function getProductById(
+  productId: Types.ObjectId | string
+): Promise<GetProductResponse | null> {
+  await connect();
+
+  const product = await Products.findById(productId, '-__v');
+
+  return product;
 }

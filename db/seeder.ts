@@ -1,3 +1,4 @@
+import { Order } from '@/models/Order';
 import Products, { Product } from '@/models/Product';
 import Users, { User } from '@/models/User';
 import dotenv from 'dotenv';
