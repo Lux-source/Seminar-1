@@ -7,10 +7,6 @@ import mongoose from 'mongoose';
 dotenv.config({ path: `.env.local`, override: true });
 const MONGODB_URI = process.env.MONGODB_URI;
 
-const order: Order[] = [
-  
-]
-
 const products: Product[] = [
   {
     name: 'Earthen Bottle',

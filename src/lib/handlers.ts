@@ -192,7 +192,7 @@ export async function createOrder(
   });
 
 
- // Clear user's cart and save order reference (Mirar por que borro)
+ // Limpio carrito porque la orden ya se hace (asi podemos hacer otra orden nueva con objetos distinos en el carrito) ->
   user.cartItems = [];
   user.orders.push(newOrder._id);
   
@@ -216,6 +216,19 @@ export async function getOrder(
     _id: orderId,
     userId: userId,
   }).populate({
+    path: 'orderItems.product',
+    select: 'name price img description',
+  });
+
+  return order;
+}
+
+export async function getOrderById(
+  orderId: Types.ObjectId | string
+): Promise<GetOrderResponse | null> {
+  await connect();
+
+  const order = await Orders.findById(orderId).populate({
     path: 'orderItems.product',
     select: 'name price img description',
   });
