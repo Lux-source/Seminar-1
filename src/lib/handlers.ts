@@ -2,6 +2,27 @@ import Products, { Product } from '@/models/Product';
 import Users, { User } from '@/models/User';
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
+import Orders, { Order } from '@/models/Order';
+
+export interface GetOrderResponse{
+  orders: ( Order | { _id:  Types.ObjectId })[];
+}
+
+export async function getOrders():Promise<GetOrderResponse>{
+  await connect();
+  
+  const orders = await Orders.find()
+    .populate('user')
+    .populate('products.product')
+    .exec();
+  
+  return {
+    orders,
+  };
+
+
+  
+}
 
 export interface GetProductsResponse {
   products: (Product | { _id: Types.ObjectId })[]
