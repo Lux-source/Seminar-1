@@ -3,6 +3,7 @@ import mongoose, {Schema, Types} from "mongoose";
 export interface OrderItem {
   product: Types.ObjectId;
   qty: number;
+  price: number; // Add price field
 }
 
 export interface Order {
@@ -20,8 +21,9 @@ const OrderSchema = new Schema<Order>({
     orderItems: [
       {
         _id: false,
-        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true}, //Otra opcion import Product arriba y poner ref: Products
-        qty: { type: Number, required: true, min: 1},
+        product: { type: Schema.Types.ObjectId, ref: 'Product', required: true },
+        qty: { type: Number, required: true, min: 1 },
+        price: { type: Number, required: true, min: 0 }, // Add price field
       },
     ],
     address: { type: String, required: true},

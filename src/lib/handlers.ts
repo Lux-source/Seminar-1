@@ -163,7 +163,7 @@ export interface CreateOrderResponse{
 export async function createOrder(
   userId: Types.ObjectId | string,
   orderData: OrderData
-): Promise<CreateOrderResponse | null>{
+): Promise<CreateOrderResponse | null> {
   await connect();
 
   const user = await Users.findById(userId).populate({
@@ -171,17 +171,18 @@ export async function createOrder(
     select: 'name price',
   });
 
-  if (!user || user.cartItems.length === 0){
+  if (!user || user.cartItems.length === 0) {
     return null;
   }
 
- // Transform cart items into order items
+  // Transform cart items into order items with price
   const orderItems: OrderItem[] = user.cartItems.map((cartItem) => ({
     product: cartItem.product._id,
     qty: cartItem.qty,
+    price: cartItem.product.price, // Include price at the time of purchase
   }));
 
- // Create a new order
+  // Create a new order
   const newOrder = await Orders.create({
     userId: user._id,
     orderItems: orderItems,
@@ -191,11 +192,9 @@ export async function createOrder(
     cardNumber: orderData.cardNumber,
   });
 
-
- // Limpio carrito porque la orden ya se hace (asi podemos hacer otra orden nueva con objetos distinos en el carrito) ->
+  // Clear user's cart and save the order reference
   user.cartItems = [];
   user.orders.push(newOrder._id);
-  
   await user.save();
 
   return { orderId: newOrder._id };
@@ -234,4 +233,123 @@ export async function getOrderById(
   });
 
   return order;
+}
+
+export interface GetUserOrdersResponse {
+  orders: {
+    _id: Types.ObjectId;
+    address: string;
+    date: Date;
+    cardHolder: string;
+    cardNumber: string;
+    orderItems: OrderItem[];
+  }[];
+}
+
+export async function getUserOrders(
+  userId: Types.ObjectId | string
+): Promise<GetUserOrdersResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId).populate({
+    path: 'orders',
+    select: '-__v',
+  });
+
+  if (!user) {
+    return null;
+  }
+
+  return { orders: user.orders as any }; // Type casting as any for simplicity
+}
+
+export interface UpdateCartItemResponse extends GetUserCartResponse {
+  newItem?: boolean;
+}
+
+export async function updateCartItem(
+  userId: Types.ObjectId | string,
+  productId: Types.ObjectId | string,
+  qty: number
+): Promise<UpdateCartItemResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId);
+
+  if (!user) {
+    return null;
+  }
+
+  const productExists = await Products.exists({ _id: productId });
+
+  if (!productExists) {
+    return null;
+  }
+
+  const existingCartItemIndex = user.cartItems.findIndex(
+    (item) => item.product.toString() === productId.toString()
+  );
+
+  let newItem = false;
+
+  if (existingCartItemIndex !== -1) {
+    user.cartItems[existingCartItemIndex].qty = qty;
+  } else {
+    user.cartItems.push({
+      product: new Types.ObjectId(productId),
+      qty: qty,
+    });
+    newItem = true;
+  }
+
+  await user.save();
+
+  // Populate cart items
+  await user.populate({
+    path: 'cartItems.product',
+    select: 'name price img description',
+  });
+
+  return { cartItems: user.cartItems, newItem };
+}
+
+export async function deleteCartItem(
+  userId: Types.ObjectId | string,
+  productId: Types.ObjectId | string
+): Promise<GetUserCartResponse | null> {
+  await connect();
+
+  const user = await Users.findById(userId);
+
+  if (!user) {
+    return null;
+  }
+
+  user.cartItems = user.cartItems.filter(
+    (item) => item.product.toString() !== productId.toString()
+  );
+
+  await user.save();
+
+  // Populate cart items
+  await user.populate({
+    path: 'cartItems.product',
+    select: 'name price img description',
+  });
+
+  return { cartItems: user.cartItems };
+}
+
+export interface GetProductResponse extends Product {
+  _id: Types.ObjectId;
+}
+
+export async function getProductById(
+  productId: Types.ObjectId | string
+): Promise<GetProductResponse | null> {
+  await connect();
+
+  const product = await Products.findById(productId, '-__v');
+
+  return product;
 }
