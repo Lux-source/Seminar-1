@@ -3,7 +3,7 @@ import Users, { User, CartItem } from '@/models/User';
 import Orders, {OrderItem, Order} from '@/models/Order'
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
-import Orders, { Order } from '@/models/Order';
+
 
 export interface GetOrderResponse{
   orders: ( Order | { _id:  Types.ObjectId })[];
