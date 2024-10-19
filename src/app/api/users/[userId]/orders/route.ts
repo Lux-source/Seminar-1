@@ -39,6 +39,18 @@ export async function POST(
     );
   }
 
+  // Regular expression for only digit cardNum
+  const cardNumberRegex = /^\d{16}$/;
+  if (!cardNumberRegex.test(cardNumber)) {
+    return NextResponse.json(
+      {
+        error: 'INVALID_CARD',
+        message: 'Invalid card number. Must be 16 digits and contain only numbers.',
+      },
+      { status: 400 }
+    );
+  }
+
   const order = await createOrder(userId, { address, cardHolder, cardNumber });
 
   if (order === null) {
@@ -52,7 +64,7 @@ export async function POST(
   }
 
   // Include Location header in the response
-  return NextResponse.json({ _id: order.orderId }, {
+  return NextResponse.json({ orderId: order.orderId }, {
     status: 201,
     headers: {
       Location: `/api/users/${userId}/orders/${order.orderId}`,
