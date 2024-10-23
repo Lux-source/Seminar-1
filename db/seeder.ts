@@ -3,6 +3,7 @@ import Products, { Product } from '@/models/Product';
 import Users, { User } from '@/models/User';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
+import bcrypt from 'bcrypt'
 
 dotenv.config({ path: `.env.local`, override: true });
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -42,7 +43,7 @@ async function seed() {
   const insertedProducts = await Products.insertMany(products);
   const user: User = {
     email: 'johndoe@example.com',
-    password: '1234',
+    password: (await bcrypt.hash('1234', 10)),
     name: 'John',
     surname: 'Doe',
     address: '123 Main St, 12345 New York, United States',

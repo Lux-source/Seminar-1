@@ -3,7 +3,7 @@ import Users, { User, CartItem } from '@/models/User';
 import Orders, {OrderItem, Order} from '@/models/Order'
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
-
+import bcrypt from 'bcrypt'
 
 export interface GetProductsResponse {
   products: (Product | { _id: Types.ObjectId })[]
@@ -46,9 +46,10 @@ export async function createUser(user: {
   if (prevUser.length !== 0) {
     return null;
   }
-
+  const hash = await bcrypt.hash(user.password, 10)
   const doc: User = {
     ...user,
+    password: hash,
     birthdate: new Date(user.birthdate),
     cartItems: [],
     orders: [],
@@ -352,4 +353,40 @@ export async function getProductById(
   const product = await Products.findById(productId, '-__v');
 
   return product;
+}
+
+// Seminar 2 checkcredentials logic
+export interface CheckCredentialsResponse {
+  _id: Types.ObjectId
+}
+
+export async function checkCredentials(
+  email: string,
+  password: string
+): Promise<CheckCredentialsResponse | null> {
+
+  // Implement this...
+  
+  await connect();
+/*
+  const user = await Users.findOne({email});
+
+  if (!user){
+    return null;
+  }
+
+  return { _id: user._id };
+
+  if (password !== user.password){
+    return null;
+  }
+*/
+  const user = await Users.findOne({email})
+
+  if(user === null || !(await bcrypt.hash(user.password, 10))){
+    return null;
+  }
+
+  return { _id: user._id };
+
 }
