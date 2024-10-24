@@ -261,7 +261,7 @@ export async function getUserOrders(
     return null;
   }
 
-  return { orders: user.orders as any }; // Type casting as any for simplicity
+  return { orders: user.orders}; 
 }
 
 export interface UpdateCartItemResponse extends GetUserCartResponse {
@@ -383,7 +383,8 @@ export async function checkCredentials(
 */
   const user = await Users.findOne({email})
 
-  if(user === null || !(await bcrypt.hash(user.password, 10))){
+  if(user === null || !(await bcrypt.hash(user.password, 10))){ // Revisar si cuadra con gabriel
+                                          // Realmente solo ve si hay un hash, comprueba con la password param?
     return null;
   }
 

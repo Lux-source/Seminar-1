@@ -39,7 +39,7 @@ export async function GET(
         error: 'NOT_FOUND',
         message: 'User not found.',
       },
-      {status: 400}
+      {status: 404}
     );
   }
 
@@ -88,7 +88,7 @@ export async function POST(
         error: 'NOT_FOUND',
         message: 'User or product not found.',
       },
-      {status: 400}
+      {status: 404}
     );
   }
 
