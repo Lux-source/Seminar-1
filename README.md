@@ -21,7 +21,6 @@ The project implements authentication and authorization mechanisms to ensure sec
 6. [Handlers](#handlers)
 7. [Code Explanation](#code-explanation)
 8. [Testing the API](#testing-the-api)
-9. [Conclusion](#conclusion)
 
 ---
 
