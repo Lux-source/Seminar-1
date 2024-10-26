@@ -368,20 +368,23 @@ export async function checkCredentials(
   // Implement this...
   
   await connect();
-/*
-  const user = await Users.findOne({email});
+
+  const user = await Users.findOne({ email });
 
   if (!user){
     return null;
   }
 
-  return { _id: user._id };
+  const match = await bcrypt.compare(password, user.password);
 
-  if (password !== user.password){
+  if (!match){
     return null;
   }
-*/
-  const user = await Users.findOne({email})
+
+  return { _id: user._id };
+  
+  // No maneajaba sin usar el compare
+  /*const user = await Users.findOne({email})
 
   if(user === null || !(await bcrypt.hash(user.password, 10))){ // Revisar si cuadra con gabriel
                                           // Realmente solo ve si hay un hash, comprueba con la password param?
@@ -389,5 +392,5 @@ export async function checkCredentials(
   }
 
   return { _id: user._id };
-
+  */
 }
