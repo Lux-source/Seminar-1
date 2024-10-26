@@ -382,8 +382,8 @@ export async function checkCredentials(
   }
 
   return { _id: user._id };
-  
-  // No maneajaba sin usar el compare
+
+  // No maneajaba sin usar el compare, porque no comparaba correctamente el plain text, con la hasheada dentro
   /*const user = await Users.findOne({email})
 
   if(user === null || !(await bcrypt.hash(user.password, 10))){ // Revisar si cuadra con gabriel
