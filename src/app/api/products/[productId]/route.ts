@@ -7,7 +7,8 @@ export async function GET(
   { params }: { params: { productId: string } }
 ): Promise<NextResponse<GetProductResponse | ErrorResponse>> {
   const { productId } = params;
-
+  
+  // Validate productId
   if (!Types.ObjectId.isValid(productId)) {
     return NextResponse.json(
       {
@@ -18,6 +19,7 @@ export async function GET(
     );
   }
 
+  // Fetch product by productId
   const product = await getProductById(productId);
 
   if (!product) {

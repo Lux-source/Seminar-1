@@ -3,7 +3,7 @@ import Users, { User, CartItem } from '@/models/User';
 import Orders, {OrderItem, Order} from '@/models/Order'
 import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
-
+import bcrypt from 'bcrypt'
 
 export interface GetOrderResponse{
   orders: ( Order | { _id:  Types.ObjectId })[];
@@ -67,9 +67,10 @@ export async function createUser(user: {
   if (prevUser.length !== 0) {
     return null;
   }
-
+  const hash = await bcrypt.hash(user.password, 10)
   const doc: User = {
     ...user,
+    password: hash,
     birthdate: new Date(user.birthdate),
     cartItems: [],
     orders: [],
@@ -281,7 +282,7 @@ export async function getUserOrders(
     return null;
   }
 
-  return { orders: user.orders as any }; // Type casting as any for simplicity
+  return { orders: user.orders}; 
 }
 
 export interface UpdateCartItemResponse extends GetUserCartResponse {
@@ -373,4 +374,44 @@ export async function getProductById(
   const product = await Products.findById(productId, '-__v');
 
   return product;
+}
+
+// Seminar 2 checkcredentials logic
+export interface CheckCredentialsResponse {
+  _id: Types.ObjectId
+}
+
+export async function checkCredentials(
+  email: string,
+  password: string
+): Promise<CheckCredentialsResponse | null> {
+
+  // Implement this...
+  
+  await connect();
+
+  const user = await Users.findOne({ email });
+
+  if (!user){
+    return null;
+  }
+
+  const match = await bcrypt.compare(password, user.password);
+
+  if (!match){
+    return null;
+  }
+
+  return { _id: user._id };
+
+  // No maneajaba sin usar el compare, porque no comparaba correctamente el plain text, con la hasheada dentro
+  /*const user = await Users.findOne({email})
+
+  if(user === null || !(await bcrypt.hash(user.password, 10))){ // Revisar si cuadra con gabriel
+                                          // Realmente solo ve si hay un hash, comprueba con la password param?
+    return null;
+  }
+
+  return { _id: user._id };
+  */
 }

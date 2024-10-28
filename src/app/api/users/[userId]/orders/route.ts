@@ -7,12 +7,37 @@ import {
   ErrorResponse,
 } from '@/lib/handlers';
 import { Types } from 'mongoose';
+import { getSession } from "@/lib/auth";
+
 
 export async function POST(
   request: NextRequest,
   { params }: { params: { userId: string } }
 ): Promise<NextResponse<CreateOrderResponse | ErrorResponse>> {
   const { userId } = params;
+
+  // Authentication
+  const session = await getSession();
+  if (!session?.userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHENTICATED',
+        message: 'Authentication required.',
+      },
+      { status: 401 }
+    );
+  }
+
+  // Authorization
+  if (session.userId !== userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      { status: 403 }
+    );
+  }
 
   // Validate userId
   if (!Types.ObjectId.isValid(userId)) {
@@ -39,6 +64,18 @@ export async function POST(
     );
   }
 
+  // Regular expression for only digit cardNum
+  const cardNumberRegex = /^\d{16}$/;
+  if (!cardNumberRegex.test(cardNumber)) {
+    return NextResponse.json(
+      {
+        error: 'INVALID_CARD',
+        message: 'Invalid card number. Must be 16 digits and contain only numbers.',
+      },
+      { status: 400 }
+    );
+  }
+
   const order = await createOrder(userId, { address, cardHolder, cardNumber });
 
   if (order === null) {
@@ -52,7 +89,7 @@ export async function POST(
   }
 
   // Include Location header in the response
-  return NextResponse.json({ _id: order.orderId }, {
+  return NextResponse.json({ orderId: order.orderId }, {
     status: 201,
     headers: {
       Location: `/api/users/${userId}/orders/${order.orderId}`,
@@ -65,6 +102,29 @@ export async function GET(
   { params }: { params: { userId: string } }
 ): Promise<NextResponse<GetUserOrdersResponse | ErrorResponse>> {
   const { userId } = params;
+
+  // Authentication
+  const session = await getSession();
+  if (!session?.userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHENTICATED',
+        message: 'Authentication required.',
+      },
+      { status: 401 }
+    );
+  }
+
+  // Authorization
+  if (session.userId !== userId) {
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      { status: 403 }
+    );
+  }
 
   // Validate userId
   if (!Types.ObjectId.isValid(userId)) {

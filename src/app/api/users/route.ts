@@ -7,6 +7,16 @@ export async function POST(
 ): Promise<NextResponse<CreateUserResponse | ErrorResponse>> {
   const data = await request.json();
 
+  if (!data.email || !data.password || !data.name) {
+    return NextResponse.json(
+      {
+        error: 'INVALID_DATA',
+        message: 'Missing required fields: email, password, or name.',
+      },
+      { status: 400 }
+    );
+  }
+
   const user = await createUser({
     email: data.email,
     password: data.password,

@@ -8,6 +8,7 @@ import {
 } from '@/lib/handlers';
 
 import { Types } from 'mongoose';
+import { getSession } from '@/lib/auth';
 
 
 export async function GET(
@@ -19,6 +20,29 @@ export async function GET(
   }
 ): Promise<NextResponse<GetUserCartResponse | ErrorResponse>>{
   const { userId } = params;
+
+  // Authentication
+  const session = await getSession();
+  if (!session?.userId){
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHENTICATED',
+        message: 'Authentication required.',
+      }, 
+      {status: 401}
+    );
+  }
+
+  // Authorization
+  if(session.userId.toString() !== userId){
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      {status: 403}
+    );
+  }
 
   if (!Types.ObjectId.isValid(userId)){
     return NextResponse.json(
@@ -39,7 +63,7 @@ export async function GET(
         error: 'NOT_FOUND',
         message: 'User not found.',
       },
-      {status: 400}
+      {status: 404}
     );
   }
 
@@ -55,6 +79,30 @@ export async function POST(
   }
 ): Promise<NextResponse<AddProductToCartResponse | ErrorResponse>>{
   const { userId } = params;
+
+  // Authentication
+  const session = await getSession();
+  if (!session?.userId){
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHENTICATED',
+        message: 'Authentication required.',
+      }, 
+      {status: 401}
+    );
+  }
+
+  // Authorization
+  if(session.userId.toString() !== userId){
+    return NextResponse.json(
+      {
+        error: 'NOT_AUTHORIZED',
+        message: 'Unauthorized access.',
+      },
+      {status: 403}
+    );
+  }
+
   const data = await request.json();
 
   if (!Types.ObjectId.isValid(userId)){
@@ -88,7 +136,7 @@ export async function POST(
         error: 'NOT_FOUND',
         message: 'User or product not found.',
       },
-      {status: 400}
+      {status: 404}
     );
   }
 

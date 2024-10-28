@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getProducts, GetProductsResponse } from '@/lib/handlers';
+import { ErrorResponse, getProducts, GetProductsResponse } from '@/lib/handlers';
 
 export async function GET(
   request: NextRequest
-): Promise<NextResponse<GetProductsResponse>> {
+): Promise<NextResponse<GetProductsResponse | ErrorResponse>> {
+
+  // Fetch all products
   const products = await getProducts();
 
-  return NextResponse.json(products);
+  return NextResponse.json(products, {status: 200});
 }
