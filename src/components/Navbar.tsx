@@ -33,7 +33,7 @@ export default async function Navbar() {
             {session ? (
               <>
                 <NavbarButton href='/cart'>
-                  <span className='sr-only'>Cart</span>
+                  <span className='sr-only'>Cart</span> 
                   <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
                 </NavbarButton>
                 <NavbarButton href='/profile'>
