@@ -14,4 +14,4 @@ const ProductSchema = new Schema<Product>({
   description: { type: String, required: false },
 });
 
-export default mongoose.models.Product || mongoose.model<Product>('Product', ProductSchema);
+export default (mongoose.models.Product as mongoose.Model<Product>)|| mongoose.model<Product>('Product', ProductSchema);
