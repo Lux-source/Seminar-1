@@ -1,4 +1,4 @@
-import mongoose, {Schema, Types} from "mongoose";
+import mongoose, {mongo, Schema, Types} from "mongoose";
 
 export interface OrderItem {
   product: Types.ObjectId;
@@ -32,4 +32,4 @@ const OrderSchema = new Schema<Order>({
     cardNumber: {type: String, required: true}, 
 });
 
-export default mongoose.models.Order || mongoose.model<Order>('Order', OrderSchema);
+export default (mongoose.models.Order as mongoose.Model<Order>) || mongoose.model<Order>('Order', OrderSchema);

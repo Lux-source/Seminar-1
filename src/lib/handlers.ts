@@ -114,10 +114,14 @@ export async function getUserCart(
 ): Promise<GetUserCartResponse | null>{
   await connect();
 
-  const user = await Users.findById(userId, {cartItems: true}).populate({
-    path: 'cartItems.product', 
-    select: 'name price img description',
-  });
+  const productProyection = {
+    __v: false
+  }
+  const user = await Users.findById(userId, {cartItems: true}).populate<{
+    cartItems:(Omit<CartItem, 'product'> & {
+     product: Product & {_id: Types.ObjectId}
+    })[]
+  }>('cartItems.product', productProyection)
 
 
   if (!user){
