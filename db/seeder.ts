@@ -16,9 +16,9 @@ const products: Product[] = [
     description: 'El encuentro entre la relojería y la escultura',
   },
   {
-    name: 'Unico Yellow Magic',
-    price: 30800,
-    img: '/img/Big-Bang-Unico-Yellow-Magic.png',
+    name: 'Unico Sailing Team',
+    price: 25200,
+    img: '/img/big-bang-unicoo-sailing-team-soldier-shot.png',
     description: 'Donde la clase se junta con la resistencia',
   },
   {

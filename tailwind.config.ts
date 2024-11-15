@@ -1,4 +1,6 @@
 import type { Config } from "tailwindcss";
+import daisyui from "daisyui";
+import lineClamp from '@tailwindcss/line-clamp';
 
 const config: Config = {
   darkMode: 'class',
@@ -15,6 +17,8 @@ const config: Config = {
       },
     },
   },
-  plugins: [],
+  plugins: [daisyui,lineClamp],
+  
 };
+
 export default config;
