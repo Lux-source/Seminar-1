@@ -3,25 +3,24 @@ import { getSession } from '@/lib/auth'
 import { getUser, getUserOrders } from '@/lib/handlers'
 
 export default async function Profile() {
-  // Obtener la sesión del usuario
   const session = await getSession()
   if (!session) {
-    redirect('/auth/signin') // Redirigir al inicio de sesión si no está autenticado
+    redirect('/auth/signin') // Redirige si no hay sesión
   }
 
-  // Obtener la información del usuario y los pedidos
+  // Obtiene los datos del usuario y sus órdenes
   const user = await getUser(session.userId)
   const orders = await getUserOrders(session.userId)
 
   if (!user) {
-    redirect('/auth/signin') // Redirigir si el usuario no existe
+    redirect('/auth/signin') // Redirige si no encuentra al usuario
   }
 
   return (
     <div className="container mx-auto p-6">
       <h3 className="text-4xl font-bold text-center mb-8">Perfil de Usuario</h3>
 
-      {/* Información del Usuario */}
+      {/* Información Personal */}
       <div className="card bg-base-100 shadow-xl p-6 mb-8">
         <h4 className="text-2xl font-bold mb-4">Información Personal</h4>
         <p className="text-lg"><strong>Nombre:</strong> {user.name} {user.surname}</p>
@@ -30,10 +29,10 @@ export default async function Profile() {
         <p className="text-lg"><strong>Fecha de Nacimiento:</strong> {new Date(user.birthdate).toLocaleDateString()}</p>
       </div>
 
-      {/* Pedidos del Usuario */}
+      {/* Órdenes */}
       <div className="card bg-base-100 shadow-xl p-6">
         <h4 className="text-2xl font-bold mb-4">Órdenes Realizadas</h4>
-        {orders?.length > 0 ? (
+        {orders?.orders.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="table-auto w-full text-left">
               <thead>
@@ -46,7 +45,7 @@ export default async function Profile() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => (
+                {orders.orders.map((order) => (
                   <tr key={order._id}>
                     <td className="px-4 py-2">{order._id}</td>
                     <td className="px-4 py-2">{new Date(order.date).toLocaleDateString()}</td>
