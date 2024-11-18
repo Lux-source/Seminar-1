@@ -23,7 +23,7 @@ export default async function Product({
   const isLoggedIn = !!session;
 
   return (
-    <div className="flex flex-col md:flex-row items-center justify-center p-6">
+    <div className="flex flex-col md:flex-row items-center justify-center p-8">
       {/* Imagen del Producto */}
       <div className="w-full md:w-1/2 flex justify-center mb-8 md:mb-0">
         {product.img && (
@@ -36,11 +36,11 @@ export default async function Product({
       </div>
 
       {/* Detalles del Producto */}
-      <div className="w-full md:w-1/2 md:pl-10 text-center md:text-left">
-        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4 tracking-tight">
+      <div className="w-full md:w-1/2 flex flex-col items-center text-center">
+        <h2 className="text-4xl md:text-5xl font-extrabold text-gray-900 mb-4">
           {product.name}
         </h2>
-        <p className="text-lg font-semibold text-gray-700 mb-6 leading-relaxed">
+        <p className="text-lg font-semibold text-gray-700 mb-6">
           {product.description || 'Descripción no disponible'}
         </p>
         <p className="text-2xl font-extrabold text-gray-900 mb-10">
@@ -51,7 +51,7 @@ export default async function Product({
           <AddToCartButton productId={product._id.toString()} userId={session.userId} />
         ) : (
           <Link href="/auth/signin">
-            <button className="bg-black text-white font-semibold py-3 px-6 rounded-md mt-4 transition duration-300 hover:bg-gray-800">
+            <button className="w-full bg-black text-white font-bold py-3 rounded-lg hover:bg-gray-800 transition duration-300">
               Inicia sesión para añadir al carrito
             </button>
           </Link>

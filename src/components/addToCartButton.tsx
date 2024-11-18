@@ -40,7 +40,7 @@ export default function AddToCartButton({ productId, userId }: AddToCartButtonPr
         >
           Choose quantity:
         </label>
-        <div className='relative flex items-center max-w-[8rem]'>
+        <div className='relative inline-flex items-center max-w-[8rem] '>
           <button
             type='button'
             onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
@@ -105,7 +105,7 @@ export default function AddToCartButton({ productId, userId }: AddToCartButtonPr
 
       <button
         onClick={handleAddToCart}
-        className='rounded-lg bg-blue-500 py-3 px-6 text-xs font-bold uppercase text-white shadow-md transition-all hover:shadow-lg focus:opacity-85 active:opacity-85 disabled:opacity-50'
+        className='btn btn-block bg-black text-base-100 px-auto '
       >
         Add to Cart
       </button>

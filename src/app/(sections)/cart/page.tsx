@@ -62,7 +62,7 @@ export default async function Cart() {
 
               {/* Acciones del Producto */}
               <div className="card-actions w-full flex justify-around">
-                <button className="btn btn-outline btn-primary">
+                <button className="btn  btn-outline btn-base-content">
                   Actualizar Cantidad
                 </button>
                 <button className="btn btn-outline btn-error">
