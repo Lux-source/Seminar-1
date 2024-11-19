@@ -47,7 +47,7 @@ export default async function Profile() {
               <tbody>
                 {orders.orders.map((order) => (
                   <tr key={order._id}>
-                    <td className="px-4 py-2">{order._id}</td>
+                    <td className="px-4 py-2">{order._id.toString()}</td>
                     <td className="px-4 py-2">{new Date(order.date).toLocaleDateString()}</td>
                     <td className="px-4 py-2">{order.address}</td>
                     <td className="px-4 py-2">
@@ -58,7 +58,7 @@ export default async function Profile() {
                     </td>
                     <td className="px-4 py-2">
                       <a
-                        href={`/api/users/${session.userId}/orders/${order._id}`}
+                        href={`/orders/${order._id}`}
                         className="text-blue-500 hover:underline"
                       >
                         Ver Detalles
