@@ -10,18 +10,32 @@ const MONGODB_URI = process.env.MONGODB_URI;
 
 const products: Product[] = [
   {
-    name: 'Earthen Bottle',
-    price: 39.95,
-    img: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-01.jpg',
-    description: 'What a bottle!',
+    name: 'Chronograph Orlinski Black Magic',
+    price: 18200,
+    img: '/img/Classic-Fusion-Chronograph-Orlinski-Black-Magic-Soldier.png',
+    description: 'El encuentro entre la relojería y la escultura',
   },
   {
-    name: 'Nomad Tumbler',
-    price: 39.95,
-    img: 'https://tailwindui.com/img/ecommerce-images/category-page-04-image-card-02.jpg',
-    description: 'Yet another item',
+    name: 'Unico Sailing Team',
+    price: 25200,
+    img: '/img/big-bang-unicoo-sailing-team-soldier-shot.png',
+    description: 'Donde la clase se junta con la resistencia',
+  },
+  {
+    name: 'Unico Magic Gold',
+    price: 44500,
+    img: '/img/Square-Bang-Unico-Magic-Gold-42-mm-Soldier.png',
+    description: 'Cuadrado, como te pones si vas al gimnasio',
+  },
+  {
+    name: 'MP-15 Takashi Murakami Tourbillon Sapphire Rainbow',
+    price: 389000,
+    img: '/img/reloj-flor.png',
+    description: 'me quiere, no me quiere...',
   },
 ];
+
+
 
 async function seed() {
   if (!MONGODB_URI) {

@@ -5,6 +5,27 @@ import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt'
 
+export interface GetOrderResponse{
+  orders: ( Order | { _id:  Types.ObjectId })[];
+}
+
+export async function getOrders():Promise<GetOrderResponse>{
+  await connect();
+  
+  const orders = await Orders.find()
+    .populate('user')
+    .populate('products.product')
+    .exec();
+  
+  return {
+    orders,
+  };
+
+
+  
+}
+
+
 export interface GetProductsResponse {
   products: (Product | { _id: Types.ObjectId })[]
 }
@@ -93,10 +114,14 @@ export async function getUserCart(
 ): Promise<GetUserCartResponse | null>{
   await connect();
 
-  const user = await Users.findById(userId, {cartItems: true}).populate({
-    path: 'cartItems.product', 
-    select: 'name price img description',
-  });
+  const productProyection = {
+    __v: false
+  }
+  const user = await Users.findById(userId, {cartItems: true}).populate<{
+    cartItems:(Omit<CartItem, 'product'> & {
+     product: Product & {_id: Types.ObjectId}
+    })[]
+  }>('cartItems.product', productProyection)
 
 
   if (!user){

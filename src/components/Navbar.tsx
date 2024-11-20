@@ -25,7 +25,7 @@ export default async function Navbar() {
                 alt='GameShop logo'
               />
               <div className='inline-block w-auto text-xl font-semibold'>
-                GameShop
+                Eterna
               </div>
             </Link>
           </div>
