@@ -1,12 +1,11 @@
-import mongoose, { Schema, Types, Document } from 'mongoose';
-import { Product } from './Product';
+import mongoose, { Schema, Types } from 'mongoose';
 
 export interface CartItem {
-  product: Types.ObjectId | Product;
+  product: Types.ObjectId;
   qty: number;
 }
 
-export interface User extends Document {
+export interface User {
   email: string;
   password: string;
   name: string;
