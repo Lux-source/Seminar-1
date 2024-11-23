@@ -1,9 +1,10 @@
-import { Order } from '@/models/Order';
+import Order from '@/models/Order';
 import Products, { Product } from '@/models/Product';
 import Users, { User } from '@/models/User';
 import dotenv from 'dotenv';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt'
+import { resolve } from 'path';
 
 dotenv.config({ path: `.env.local`, override: true });
 const MONGODB_URI = process.env.MONGODB_URI;
@@ -95,8 +96,43 @@ async function seed() {
         orders: [],
       },
     ];
+  // For checking the profile orders appear correctly
   const res = await Users.create(users);
   console.log(JSON.stringify(res, null, 2));
+  const johnDoe = res.find((user) => user.email === 'johndoe@example.com');
+  if (!johnDoe) {
+    throw new Error('John Doe not found');
+  }
+
+  const orders = [
+    {
+      userId: johnDoe._id,
+      orderItems: [
+        { product: insertedProducts[0]._id, qty: 2, price: insertedProducts[0].price },
+        { product: insertedProducts[1]._id, qty: 5, price: insertedProducts[1].price },
+      ],
+      address: johnDoe.address,
+      date: new Date('2023-01-01'),
+      cardHolder: 'John Doe',
+      cardNumber: '1234567812345678',
+    },
+    {
+      userId: johnDoe._id,
+      orderItems: [
+        { product: insertedProducts[2]._id, qty: 1, price: insertedProducts[2].price },
+        { product: insertedProducts[3]._id, qty: 2, price: insertedProducts[3].price },
+      ],
+      address: johnDoe.address,
+      date: new Date('2023-06-01'),
+      cardHolder: 'John Doe',
+      cardNumber: '8765432187654321',
+    },
+  ];
+  const createdOrders = await Order.insertMany(orders);
+  johnDoe.orders = createdOrders.map((order) => order._id);
+  await johnDoe.save();
+
+  
 
   await conn.disconnect();
 }
