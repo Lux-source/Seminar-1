@@ -67,7 +67,7 @@ export default async function OrderDetails({
 
               {/* Cantidad y Precio */}
               <div className="mt-auto mb-4">
-                <p className="text-lg">Cantidad: {orderItem.qty}</p>
+                <p className="text-lg">Quantity: {orderItem.qty}</p>
                 <p className="text-xl font-semibold text-black mt-1">
                   {(orderItem.qty * orderItem.price).toFixed(2)} €
                 </p>

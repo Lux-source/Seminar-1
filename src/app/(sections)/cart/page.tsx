@@ -22,7 +22,7 @@ export default async function Cart() {
   return (
     <div className="container mx-auto p-6 text-center">
       <h3 className="text-4xl font-bold text-center mb-8">
-        Mi Carrito de Compras
+        My Shopping Cart
       </h3>
 
       {/* Botón dinámico */}
@@ -31,19 +31,19 @@ export default async function Cart() {
           className="btn btn-wide bg-black text-white text-lg hover:bg-red-700 hover:scale-105 transition-transform duration-300 mb-4"
           disabled
         >
-          Carrito Vacío
+          Empty Cart
         </button>
       ) : (
         <button
           className="btn btn-wide bg-black text-white text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 mb-4"
         >
-          Place Order
+          Checkout
         </button>
       )}
 
       {cartItemsData.cartItems.length === 0 ? (
         <div className="text-center">
-          <span className="text-lg text-gray-500">El carrito está vacío</span>
+          <span className="text-lg text-gray-500">The cart is empty</span>
         </div>
       ) : (
         <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
@@ -74,7 +74,7 @@ export default async function Cart() {
 
                 {/* Cantidad y Precio */}
                 <div className="mt-auto mb-4">
-                  <p className="text-lg">Cantidad: {cartItem.qty}</p>
+                  <p className="text-lg">Quantity: {cartItem.qty}</p>
                   <p className="text-xl font-semibold text-black mt-1">
                     {cartItem.product.price.toFixed(2)} €
                   </p>
@@ -84,7 +84,7 @@ export default async function Cart() {
               {/* Acciones del Producto */}
               <div className="card-actions w-full flex justify-around">
                 <button className="btn btn-outline btn-base-content">
-                  Actualizar Cantidad
+                  Update Quantity
                 </button>
                 <button className="btn btn-outline btn-error">Eliminar</button>
               </div>
