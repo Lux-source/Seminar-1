@@ -39,10 +39,10 @@ export default async function CheckoutPage() {
               <table className='w-full text-left text-sm'>
                 <thead>
                   <tr className='border-b'>
-                    <th className='py-2'>Product Name</th>
-                    <th className='py-2 text-right'>Quantity</th>
-                    <th className='py-2 text-right'>Price</th>
-                    <th className='py-2 text-right'>Total</th>
+                    <th className='py-2 min-w-[110px]'>Product Name</th>
+                    <th className='py-2 text-right min-w-[110px]'>Quantity</th>
+                    <th className='py-2 text-right min-w-[110px]'>Price</th>
+                    <th className='py-2 text-right min-w-[110px]'>Total</th>
                   </tr>
                 </thead>
                 <tbody>
