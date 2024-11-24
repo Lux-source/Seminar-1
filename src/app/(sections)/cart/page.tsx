@@ -82,8 +82,8 @@ export default async function Cart() {
               </div>
 
               {/* Acciones del Producto */}
-              <div className="card-actions w-full flex justify-around">
-                <div className="relative flex items-center max-w-[8rem]">
+              <div className="card-actions w-full flex justify-between items-center">
+              <div className="flex items-center gap-2 flex-grow">
                   <button
                     type="button"
                     className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
@@ -107,7 +107,7 @@ export default async function Cart() {
                   <input
                     type="number"
                     id="quantity-input"
-                    value={1} // Valor fijo
+                    value={1}
                     readOnly
                     min="1"
                     max="50"
