@@ -136,7 +136,7 @@ export default async function Cart() {
                   </button>
                 </div>
 
-                <button className="btn btn-outline btn-error">Eliminar</button>
+                <button className="btn btn-outline btn-error">Delete</button>
               </div>
             </div>
           ))}
