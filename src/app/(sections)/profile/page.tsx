@@ -18,30 +18,30 @@ export default async function Profile() {
 
   return (
     <div className="container mx-auto p-6">
-      <h3 className="text-4xl font-bold text-center mb-8">Perfil de Usuario</h3>
+      <h3 className="text-4xl font-bold text-center mb-8">User Profile</h3>
 
       {/* Información Personal */}
       <div className="card bg-base-100 shadow-xl p-6 mb-8">
-        <h4 className="text-2xl font-bold mb-4">Información Personal</h4>
-        <p className="text-lg"><strong>Nombre:</strong> {user.name} {user.surname}</p>
+        <h4 className="text-2xl font-bold mb-4">Personal Information</h4>
+        <p className="text-lg"><strong>Name:</strong> {user.name} {user.surname}</p>
         <p className="text-lg"><strong>Email:</strong> {user.email}</p>
-        <p className="text-lg"><strong>Dirección:</strong> {user.address}</p>
-        <p className="text-lg"><strong>Fecha de Nacimiento:</strong> {new Date(user.birthdate).toLocaleDateString()}</p>
+        <p className="text-lg"><strong>Address:</strong> {user.address}</p>
+        <p className="text-lg"><strong>Birth Date:</strong> {new Date(user.birthdate).toLocaleDateString()}</p>
       </div>
 
       {/* Órdenes */}
       <div className="card bg-base-100 shadow-xl p-6">
-        <h4 className="text-2xl font-bold mb-4">Órdenes Realizadas</h4>
+        <h4 className="text-2xl font-bold mb-4">Completed Orders</h4>
         {orders?.orders.length > 0 ? (
           <div className="overflow-x-auto">
             <table className="table-auto w-full text-left">
               <thead>
                 <tr>
-                  <th className="px-4 py-2">ID de Orden</th>
-                  <th className="px-4 py-2">Fecha</th>
-                  <th className="px-4 py-2">Dirección</th>
+                  <th className="px-4 py-2">Order ID</th>
+                  <th className="px-4 py-2">Date</th>
+                  <th className="px-4 py-2">Address</th>
                   <th className="px-4 py-2">Total</th>
-                  <th className="px-4 py-2">Detalles</th>
+                  <th className="px-4 py-2">Details</th>
                 </tr>
               </thead>
               <tbody>
@@ -61,7 +61,7 @@ export default async function Profile() {
                         href={`/orders/${order._id}`}
                         className="text-blue-500 hover:underline"
                       >
-                        Ver Detalles
+                        View Details
                       </a>
                     </td>
                   </tr>
@@ -70,7 +70,7 @@ export default async function Profile() {
             </table>
           </div>
         ) : (
-          <p className="text-lg">No has realizado ningún pedido todavía.</p>
+          <p className="text-lg">You have not made any orders yet</p>
         )}
       </div>
     </div>
