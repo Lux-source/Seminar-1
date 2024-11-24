@@ -21,22 +21,22 @@ export default async function OrderDetails({
   return (
     <div className="container mx-auto p-6 text-center">
       <h3 className="text-4xl font-bold text-center mb-8">
-        Detalles del Pedido
+        Order Details
       </h3>
 
       {/* Información del Pedido */}
       <div className="card bg-base-100 shadow-xl p-6 mb-8">
         <p className="text-lg">
-          <strong>ID del Pedido:</strong> {order._id.toString()}
+          <strong>Order ID:</strong> {order._id.toString()}
         </p>
         <p className="text-lg">
-          <strong>Fecha:</strong> {new Date(order.date).toLocaleDateString()}
+          <strong>Date:</strong> {new Date(order.date).toLocaleDateString()}
         </p>
         <p className="text-lg">
-          <strong>Dirección:</strong> {order.address}
+          <strong>Address:</strong> {order.address}
         </p>
         <p className="text-lg">
-          <strong>Titular de la Tarjeta:</strong> {order.cardHolder}
+          <strong>Cardholder:</strong> {order.cardHolder}
         </p>
       </div>
 
