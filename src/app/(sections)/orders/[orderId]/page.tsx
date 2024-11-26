@@ -20,22 +20,22 @@ export default async function OrderDetails({
 
   return (
     <div className="container mx-auto p-6 text-center">
-      <h3 className="text-4xl font-bold text-center mb-8">
-        Order Details
+      <h3 className="text-4xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100">
+      Order Details
       </h3>
 
       {/* Información del Pedido */}
-      <div className="card bg-base-100 shadow-xl p-6 mb-8">
-        <p className="text-lg">
-          <strong>Order ID:</strong> {order._id.toString()}
+      <div className="card bg-white dark:bg-gray-900 shadow-xl p-6 mb-8">
+      <p className="text-lg text-gray-700 dark:text-gray-300">
+      <strong>Order ID:</strong> {order._id.toString()}
         </p>
-        <p className="text-lg">
+        <p className="text-lg text-gray-700 dark:text-gray-300">
           <strong>Date:</strong> {new Date(order.date).toLocaleDateString()}
         </p>
-        <p className="text-lg">
+        <p className="text-lg text-gray-700 dark:text-gray-300">
           <strong>Address:</strong> {order.address}
         </p>
-        <p className="text-lg">
+        <p className="text-lg text-gray-700 dark:text-gray-300">
           <strong>Cardholder:</strong> {order.cardHolder}
         </p>
       </div>
@@ -45,7 +45,7 @@ export default async function OrderDetails({
         {order.orderItems.map((orderItem) => (
           <div
             key={orderItem.product._id.toString()}
-            className="card bg-base-100 shadow-xl flex flex-col p-4"
+            className="card bg-white dark:bg-gray-900 shadow-xl flex flex-col p-4"
           >
             {/* Imagen del Producto */}
             <figure className="w-full flex justify-center mb-4">
@@ -61,14 +61,16 @@ export default async function OrderDetails({
             {/* Contenedor de Información del Producto */}
             <div className="flex flex-col flex-grow items-center text-center">
               {/* Nombre del Producto */}
-              <h2 className="text-2xl font-bold mb-2">
+              <h2 className="text-2xl font-bold mb-2 text-gray-800 dark:text-gray-100">
                 {orderItem.product.name}
               </h2>
 
               {/* Cantidad y Precio */}
               <div className="mt-auto mb-4">
-                <p className="text-lg">Quantity: {orderItem.qty}</p>
-                <p className="text-xl font-semibold text-black mt-1">
+              <p className="text-lg text-gray-700 dark:text-gray-300">
+                  Quantity: {orderItem.qty}
+                </p>
+                <p className="text-xl font-semibold text-black dark:text-gray-100 mt-1">
                   {(orderItem.qty * orderItem.price).toFixed(2)} €
                 </p>
               </div>
