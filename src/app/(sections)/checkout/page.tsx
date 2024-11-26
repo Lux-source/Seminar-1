@@ -58,10 +58,10 @@ export default async function CheckoutPage() {
                       </td>
                       <td className='py-2 text-right'>{item.qty}</td>
                       <td className='py-2 text-right'>
-                        {item.product.price.toFixed(2)} €
+                        {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(item.product.price) + ' €'}
                       </td>
                       <td className='py-2 text-right'>
-                        {(item.qty * item.product.price).toFixed(2)} €
+                        {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(item.qty * item.product.price) + ' €'}
                       </td>
                     </tr>
                   ))}
@@ -75,7 +75,8 @@ export default async function CheckoutPage() {
                     <td
                   className="py-2 text-right font-semibold text-gray-900 dark:text-gray-100"
                 >
-                      {totalPrice.toFixed(2)} €
+                  {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(totalPrice) + ' €'}
+                      
                     </td>
                   </tr>
                 </tfoot>
@@ -149,7 +150,7 @@ export default async function CheckoutPage() {
               disabled={!cartItems.length}
               className={`w-full rounded-md px-4 py-2 font-medium text-white shadow-sm ${
                 cartItems.length
-                ? 'bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600'
+                ? 'bg-green-700 hover:bg-green-600 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600'
                 : 'cursor-not-allowed bg-gray-400 dark:bg-gray-600'
               }`}
             >

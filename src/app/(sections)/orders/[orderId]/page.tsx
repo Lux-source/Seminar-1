@@ -25,7 +25,7 @@ export default async function OrderDetails({
       </h3>
 
       {/* Información del Pedido */}
-      <div className="card bg-white dark:bg-gray-900 shadow-xl p-6 mb-8">
+      <div className="card bg-white dark:bg-gray-700 shadow-xl p-6 mb-8">
       <p className="text-lg text-gray-700 dark:text-gray-300">
       <strong>Order ID:</strong> {order._id.toString()}
         </p>
@@ -45,7 +45,7 @@ export default async function OrderDetails({
         {order.orderItems.map((orderItem) => (
           <div
             key={orderItem.product._id.toString()}
-            className="card bg-white dark:bg-gray-900 shadow-xl flex flex-col p-4"
+            className="card bg-white dark:bg-gray-700 shadow-xl dark:shadow-gray-700 flex flex-col p-4"
           >
             {/* Imagen del Producto */}
             <figure className="w-full flex justify-center mb-4">
@@ -71,7 +71,7 @@ export default async function OrderDetails({
                   Quantity: {orderItem.qty}
                 </p>
                 <p className="text-xl font-semibold text-black dark:text-gray-100 mt-1">
-                  {(orderItem.qty * orderItem.price).toFixed(2)} €
+                  {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(orderItem.qty * orderItem.price) + ' €'}
                 </p>
               </div>
             </div>

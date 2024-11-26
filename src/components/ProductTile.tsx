@@ -12,7 +12,7 @@ export default function ProductTile({ product }: ProductTileProps) {
       href={`/products/${product._id}`}
       className="group flex flex-col items-center text-center transform transition-transform duration-300 hover:scale-105"
     >
-      <div className="aspect-h-1 aspect-w-2 w-full overflow-hidden rounded-lg bg-gray-200 dark:bg-gray-700">
+      <div className="aspect-h-1 aspect-w-2 w-full overflow-hidden rounded-lg bg-white dark:bg-gray-700">
       <img
           src={product.img}
           alt={product.name}
@@ -23,7 +23,7 @@ export default function ProductTile({ product }: ProductTileProps) {
         {product.name}
       </h3>
       <p className="mt-1 text-base font-medium text-gray-900 dark:text-gray-200">
-        {product.price + ' €'}
+      {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(product.price) + ' €'}
       </p>
     </Link>
   )

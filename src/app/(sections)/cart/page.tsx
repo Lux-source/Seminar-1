@@ -20,7 +20,7 @@ export default async function Cart() {
   }
 
   return (
-    <div className="container mx-auto p-6 text-center bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+    <div className="container mx-auto p-6 text-center bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
       <h3 className="text-4xl font-bold text-center mb-8">
         My Shopping Cart
       </h3>
@@ -52,7 +52,7 @@ export default async function Cart() {
           {cartItemsData.cartItems.map((cartItem) => (
             <div
               key={cartItem.product._id.toString()}
-              className="group card bg-base-100 shadow-xl flex flex-col p-4 dark:bg-gray-800 dark:shadow-gray-700 transform transition-transform duration-300 hover:scale-105"
+              className="group card bg-white shadow-xl flex flex-col p-4 dark:bg-gray-800 dark:shadow-gray-700 transform transition-transform duration-300 hover:scale-105"
             >
               {/* Product Image */}
               <figure className="w-full flex justify-center mb-4">
@@ -82,7 +82,7 @@ export default async function Cart() {
                     Quantity: {cartItem.qty}
                   </p>
                   <p className="text-xl font-semibold text-black mt-1 dark:text-gray-200">
-                    {cartItem.product.price.toFixed(2)} €
+                    {new Intl.NumberFormat('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }).format(cartItem.product.price) + ' €'}
                   </p>
                 </div>
               </div>
