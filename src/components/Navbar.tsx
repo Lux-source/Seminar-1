@@ -17,7 +17,7 @@ export default async function Navbar() {
         <div className='relative flex h-16 items-center justify-between'>
           <div className='flex flex-1 items-stretch justify-start'>
             <Link
-              className="flex flex-shrink-0 items-center space-x-4 text-gray-800 hover:text-gray-600 dark:text-gray-300 dark:hover:text-gray-100"
+              className="flex flex-shrink-0 items-center space-x-4 text-gray-300 hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100"
               href='/'
             >
               <img
