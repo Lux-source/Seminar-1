@@ -106,29 +106,28 @@ export async function getUser(
 }
 
 export interface GetUserCartResponse {
-  cartItems: CartItem[];
+  cartItems: (Omit<CartItem, 'product'> & {
+    product: Product;
+  })[];
 }
 
 export async function getUserCart(
   userId: Types.ObjectId | string
-): Promise<GetUserCartResponse | null>{
+): Promise<GetUserCartResponse | null> {
   await connect();
 
-  const productProyection = {
-    __v: false
-  }
-  const user = await Users.findById(userId, {cartItems: true}).populate<{
-    cartItems:(Omit<CartItem, 'product'> & {
-     product: Product & {_id: Types.ObjectId}
-    })[]
-  }>('cartItems.product', productProyection)
+  const user = await Users.findById(userId).populate<{
+    cartItems: {
+      product: Product;
+      qty: number;
+    }[];
+  }>('cartItems.product');
 
-
-  if (!user){
+  if (!user) {
     return null;
   }
 
-  return {cartItems: user.cartItems};
+  return { cartItems: user.cartItems };
 }
 
 export interface AddProductToCartResponse {

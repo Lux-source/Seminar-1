@@ -1,78 +1,120 @@
-import { redirect } from 'next/navigation'
-import { getSession } from '@/lib/auth'
-import { getUser, getUserOrders } from '@/lib/handlers'
+import { redirect } from 'next/navigation';
+import { getSession } from '@/lib/auth';
+import { getUser, getUserOrders } from '@/lib/handlers';
 
 export default async function Profile() {
-  const session = await getSession()
+  const session = await getSession();
   if (!session) {
-    redirect('/auth/signin') // Redirige si no hay sesión
+    redirect('/auth/signin'); // Redirects if no session
   }
 
-  // Obtiene los datos del usuario y sus órdenes
-  const user = await getUser(session.userId)
-  const orders = await getUserOrders(session.userId)
+  // Fetch user data and orders
+  const user = await getUser(session.userId);
+  const orders = await getUserOrders(session.userId);
 
   if (!user) {
-    redirect('/auth/signin') // Redirige si no encuentra al usuario
+    redirect('/auth/signin'); // Redirects if user is not found
   }
 
   return (
     <div className="container mx-auto p-6">
-      <h3 className="text-4xl font-bold text-center mb-8">Perfil de Usuario</h3>
-
-      {/* Información Personal */}
-      <div className="card bg-base-100 shadow-xl p-6 mb-8">
-        <h4 className="text-2xl font-bold mb-4">Información Personal</h4>
-        <p className="text-lg"><strong>Nombre:</strong> {user.name} {user.surname}</p>
-        <p className="text-lg"><strong>Email:</strong> {user.email}</p>
-        <p className="text-lg"><strong>Dirección:</strong> {user.address}</p>
-        <p className="text-lg"><strong>Fecha de Nacimiento:</strong> {new Date(user.birthdate).toLocaleDateString()}</p>
+      <h3 className="mb-8 text-center text-4xl font-bold text-gray-900 dark:text-gray-100">
+        User Profile
+      </h3>
+      {/* Personal Information */}
+      <div className="card mb-8 bg-base-100 p-6 shadow-xl dark:bg-gray-800 dark:text-gray-300">
+        <h4 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Personal Information
+        </h4>
+        <p className="text-lg">
+          <strong>Name:</strong> {user.name} {user.surname}
+        </p>
+        <p className="text-lg">
+          <strong>Email:</strong> {user.email}
+        </p>
+        <p className="text-lg">
+          <strong>Address:</strong> {user.address}
+        </p>
+        <p className="text-lg">
+          <strong>Birth Date:</strong>{' '}
+          {new Date(user.birthdate).toLocaleDateString()}
+        </p>
       </div>
 
-      {/* Órdenes */}
-      <div className="card bg-base-100 shadow-xl p-6">
-        <h4 className="text-2xl font-bold mb-4">Órdenes Realizadas</h4>
+      {/* Orders */}
+      <div className="card bg-base-100 p-6 shadow-xl dark:bg-gray-800 dark:text-gray-300">
+        <h4 className="mb-4 text-2xl font-bold text-gray-900 dark:text-gray-100">
+          Completed Orders
+        </h4>
         {orders?.orders.length > 0 ? (
           <div className="overflow-x-auto">
-            <table className="table-auto w-full text-left">
+            <table className="w-full table-auto text-left">
               <thead>
-                <tr>
-                  <th className="px-4 py-2">ID de Orden</th>
-                  <th className="px-4 py-2">Fecha</th>
-                  <th className="px-4 py-2">Dirección</th>
-                  <th className="px-4 py-2">Total</th>
-                  <th className="px-4 py-2">Detalles</th>
+                <tr className="border-b border-gray-300 dark:border-gray-700">
+                  <th className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    Order ID
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    Date
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    Address
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    Total
+                  </th>
+                  <th className="px-4 py-2 text-gray-700 dark:text-gray-300">
+                    Details
+                  </th>
                 </tr>
               </thead>
               <tbody>
-                {orders.orders.map((order) => (
-                  <tr key={order._id}>
-                    <td className="px-4 py-2">{order._id.toString()}</td>
-                    <td className="px-4 py-2">{new Date(order.date).toLocaleDateString()}</td>
-                    <td className="px-4 py-2">{order.address}</td>
-                    <td className="px-4 py-2">
-                      {order.orderItems.reduce(
-                        (total, item) => total + item.qty * item.price,
-                        0
-                      ).toFixed(2)} €
-                    </td>
-                    <td className="px-4 py-2">
-                      <a
-                        href={`/orders/${order._id}`}
-                        className="text-blue-500 hover:underline"
-                      >
-                        Ver Detalles
-                      </a>
-                    </td>
-                  </tr>
-                ))}
+                {orders.orders.map((order) => {
+                  const totalPrice = order.orderItems.reduce(
+                    (total, item) => total + item.qty * item.price,
+                    0
+                  );
+
+                  const formattedTotalPrice = new Intl.NumberFormat('en-US', {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2,
+                  }).format(totalPrice) + ' €';
+
+                  return (
+                    <tr
+                      key={order._id}
+                      className="border-b border-gray-300 dark:border-gray-700"
+                    >
+                      <td className="px-4 py-2">{order._id.toString()}</td>
+                      <td className="px-4 py-2">
+                        {new Date(order.date).toLocaleDateString()}
+                      </td>
+                      <td className="px-4 py-2">{order.address}</td>
+                      <td className="px-4 py-2">
+                        <span style={{ whiteSpace: 'nowrap' }}>
+                          {formattedTotalPrice}
+                        </span>
+                      </td>
+                      <td className="px-4 py-2">
+                        <a
+                          href={`/orders/${order._id}`}
+                          className="text-blue-500 dark:text-blue-400 hover:underline"
+                        >
+                          View Details
+                        </a>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
         ) : (
-          <p className="text-lg">No has realizado ningún pedido todavía.</p>
+          <p className="text-lg text-gray-500 dark:text-gray-400">
+            You have not made any orders yet
+          </p>
         )}
       </div>
     </div>
-  )
+  );
 }
