@@ -1,10 +1,37 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function SampleClientComponent() {
   const [leftCount, setLeftCount] = useState(0)
   const [rightCount, setRightCount] = useState(0)
+
+  /*useEffect(() =>
+    alert("Component rendered!")
+  )*/
+
+  /*useEffect(() =>
+    alert("Component rendered!")
+  , [])*/
+
+   /*useEffect(() =>
+    alert("Component rendered!")
+  , [leftCount])*/
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await fetch('https://get.geojs.io/v1/ip/country.json')
+      const json = await data.json()
+  
+      if (data?.ok) {
+        console.log(json)
+      } else {
+        // Handle error
+      }
+    }
+  
+    fetchData()
+      .catch(console.error)
+  }, [])
 
   function handleLeftClick() {
     setLeftCount((count) => count + 1)
