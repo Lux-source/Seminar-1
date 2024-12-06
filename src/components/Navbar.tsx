@@ -6,7 +6,8 @@ import {
 import NavbarButton from '@/components/NavbarButton'
 import Link from 'next/link'
 import { getSession } from '@/lib/auth'
-import { ThemeSwitcher } from '@/components/ThemeSwitcher';
+import { ThemeSwitcher } from '@/components/ThemeSwitcher'
+import NavbarSignOutButton from '@/components/NavbarSignOutButton'
 
 export default async function Navbar() {
   const session = await getSession()
@@ -17,7 +18,7 @@ export default async function Navbar() {
         <div className='relative flex h-16 items-center justify-between'>
           <div className='flex flex-1 items-stretch justify-start'>
             <Link
-              className="flex flex-shrink-0 items-center space-x-4 text-gray-300 hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100"
+              className='flex flex-shrink-0 items-center space-x-4 text-gray-300 hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100'
               href='/'
             >
               <img
@@ -31,35 +32,30 @@ export default async function Navbar() {
             </Link>
           </div>
           <div className='absolute inset-y-0 right-0 flex items-center space-x-4'>
+            <ThemeSwitcher/>
             {session ? (
               <>
                 <NavbarButton href='/cart'>
-                  <span className='sr-only'>Cart</span> 
+                  <span className='sr-only'>Cart</span>
                   <ShoppingCartIcon className='h-6 w-6' aria-hidden='true' />
                 </NavbarButton>
                 <NavbarButton href='/profile'>
                   <span className='sr-only'>User profile</span>
                   <UserIcon className='h-6 w-6' aria-hidden='true' />
                 </NavbarButton>
-                <NavbarButton href='#'>
-                  <span className='sr-only'>Sign out</span>
-                  <ArrowRightStartOnRectangleIcon
-                    className='h-6 w-6'
-                    aria-hidden='true'
-                  />
-                </NavbarButton>
+                <NavbarSignOutButton />
               </>
             ) : (
               <>
                 <Link
                   href='/auth/signup'
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className='rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                 >
                   Sign up
                 </Link>
                 <Link
                   href='/auth/signin'
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className='rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white'
                 >
                   Sign in
                 </Link>
