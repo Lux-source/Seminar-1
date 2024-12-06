@@ -3,6 +3,8 @@ import { getUserCart } from '@/lib/handlers';
 import Link from 'next/link';
 import { getSession } from '@/lib/auth';
 import Image from 'next/image';
+import CartItemCounter from '@/components/CartItemCounter';
+import DeleteFromCartButton from '@/components/DeleteFromCartButton';
 
 export default async function Cart() {
   const session = await getSession();
@@ -88,64 +90,24 @@ export default async function Cart() {
               </div>
 
               {/* Product Actions */}
-              <div className="card-actions w-full flex justify-between items-center">
-                <div className="flex items-center gap-2 flex-grow">
-                  <button
-                    type="button"
-                    className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  >
-                    <svg
-                      className="w-3 h-3 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 2"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M1 1h16"
-                      />
-                    </svg>
-                  </button>
-                  <input
-                    type="number"
-                    id="quantity-input"
-                    value={1}
-                    readOnly
-                    min="1"
-                    max="50"
-                    className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
-                    style={{ appearance: 'textfield' }}
-                  />
-                  <button
-                    type="button"
-                    className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-                  >
-                    <svg
-                      className="w-3 h-3 text-gray-900 dark:text-white"
-                      aria-hidden="true"
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 18 18"
-                    >
-                      <path
-                        stroke="currentColor"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M9 1v16M1 9h16"
-                      />
-                    </svg>
-                  </button>
-                </div>
+              <div className="card-actions flex w-full items-center space-x-2">
+                  {/* Contador */}
+                  <div className="flex-1">
+                    <CartItemCounter
+                      userId={session.userId}
+                      productId={cartItem.product._id.toString()}
+                      value={cartItem.qty}
+                    />
+                  </div>
 
-                <button className="btn btn-outline btn-error dark:border-red-500 dark:text-red-500 group-hover:scale-105 transition-transform duration-300">
-                  Delete
-                </button>
+                  {/* Botón de eliminar */}
+                  <DeleteFromCartButton
+                    userId={session.userId}
+                    productId={cartItem.product._id.toString()}
+                    
+                  />
               </div>
+
             </div>
           ))}
         </div>
