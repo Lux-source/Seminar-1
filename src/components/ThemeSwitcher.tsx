@@ -29,7 +29,7 @@ export function ThemeSwitcher() {
       {currentTheme === 'dark' ? (
         <SunIcon className="h-6 w-6 text-yellow-500" aria-hidden="true" />
       ) : (
-        <MoonIcon className="h-6 w-6 text-gray-300" aria-hidden="true" />
+        <MoonIcon className="h-6 w-6 text-gray-400" aria-hidden="true" />
       )}
     </button>
   );
