@@ -39,7 +39,7 @@ export default async function CheckoutPage() {
             <table className="w-full text-left text-sm min-w-[600px]">
             <thead>
                 <tr className="border-b dark:border-gray-700">
-                <th className='py-2'>Product Name</th>
+                    <th className='py-2'>Product Name</th>
                     <th className='py-2 text-right'>Quantity</th>
                     <th className='py-2 text-right'>Price</th>
                     <th className='py-2 text-right'>Total</th>
