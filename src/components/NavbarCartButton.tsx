@@ -34,7 +34,7 @@ export default function NavbarCartButton({ userId }: NavbarCartButtonProps) {
     fetchCartData();
 
     // Opcional: Actualiza el contador cuando el carrito cambie
-    const intervalId = setInterval(fetchCartData, 10000); // Cada 10 segundos
+    const intervalId = setInterval(fetchCartData, 4000); // Cada cuatro  segundos
     return () => clearInterval(intervalId);
   }, [userId]);
 

@@ -6,7 +6,7 @@ import {
 import NavbarButton from '@/components/NavbarButton';
 import Link from 'next/link';
 import { getSession } from '@/lib/auth';
-
+import NavbarCartButton from './NavbarCartButton';
 import NavbarSignOutButton from '@/components/NavbarSignOutButton';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
@@ -39,10 +39,10 @@ export default async function Navbar(): Promise<JSX.Element> {
             <ThemeSwitcher />
             {session ? (
               <> 
-                <NavbarButton href="/cart">
+                <NavbarCartButton userId={session.userId} href="/cart">
                   <span className="sr-only">Cart</span>
                   <ShoppingCartIcon className="h-6 w-6" aria-hidden="true" />
-                </NavbarButton>
+                </NavbarCartButton>
                 <NavbarButton href="/profile">
                   <span className="sr-only">User profile</span>
                   <UserIcon className="h-6 w-6" aria-hidden="true" />
