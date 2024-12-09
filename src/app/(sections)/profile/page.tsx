@@ -18,7 +18,7 @@ export default async function Profile() {
   }
 
   const plainUser = JSON.parse(JSON.stringify(user));
-  const plainOrders = JSON.parse(JSON.stringify(orders.orders));
+  const plainOrders = JSON.parse(JSON.stringify(orders?.orders || []));
 
   return <ProfileContent user={plainUser} orders={plainOrders} />;
     

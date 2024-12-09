@@ -1,13 +1,19 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import Link from 'next/link';
 
 interface NavbarCartButtonProps {
   userId: string;
+  href: string; // Add href for consistency with usage
+  children?: ReactNode; // Add children prop
 }
 
-export default function NavbarCartButton({ userId }: NavbarCartButtonProps) {
+export default function NavbarCartButton({
+  userId,
+  href,
+  children,
+}: NavbarCartButtonProps) {
   const [cartCount, setCartCount] = useState<number>(0);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -19,7 +25,10 @@ export default function NavbarCartButton({ userId }: NavbarCartButtonProps) {
         if (response.ok) {
           const data = await response.json();
           // Sumar la cantidad total de productos en el carrito
-          const totalItems = data.cartItems.reduce((sum, item) => sum + item.qty, 0);
+          const totalItems = data.cartItems.reduce(
+            (sum, item) => sum + item.qty,
+            0
+          );
           setCartCount(totalItems);
         } else {
           console.error('Failed to fetch cart data');
@@ -39,11 +48,10 @@ export default function NavbarCartButton({ userId }: NavbarCartButtonProps) {
   }, [userId]);
 
   return (
-    <Link href="/cart" className="relative">
-      <span className="sr-only">Cart</span>
+    <Link href={href} className="relative">
+      {children /* Render children inside the button */}
       <div className="relative inline-flex items-center">
         <svg
-          
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
