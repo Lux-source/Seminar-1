@@ -26,7 +26,7 @@ export default function NavbarCartButton({
           const data = await response.json();
           // Sumar la cantidad total de productos en el carrito
           const totalItems = data.cartItems.reduce(
-            (sum, item) => sum + item.qty,
+            (sum: number, item: { qty: number }) => sum + item.qty,
             0
           );
           setCartCount(totalItems);
