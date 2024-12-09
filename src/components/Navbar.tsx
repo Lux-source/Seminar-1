@@ -17,7 +17,7 @@ export default async function Navbar(): Promise<JSX.Element> {
     <nav className="fixed top-0 z-50 w-full bg-gray-800 bg-opacity-90 backdrop-blur-lg backdrop-filter dark:bg-gray-800 dark:bg-opacity-90">
       <div className="mx-auto max-w-7xl px-6 sm:px-8 lg:px-10">
         <div className="relative flex h-16 items-center justify-between">
-          {/* Logo and Branding */}
+          {/* Logo */}
           <div className="flex flex-1 items-stretch justify-start">
             <Link
               className="flex flex-shrink-0 items-center space-x-4 text-gray-300 hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100"
@@ -53,13 +53,13 @@ export default async function Navbar(): Promise<JSX.Element> {
               <>
                 <Link
                   href="/auth/signup"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   Sign up
                 </Link>
                 <Link
                   href="/auth/signin"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-gray-400 hover:bg-gray-200 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700 dark:hover:text-white"
                 >
                   Sign in
                 </Link>
