@@ -36,11 +36,13 @@ export default async function Cart() {
           Empty Cart
         </button>
       ) : (
-        <button
-          className="btn btn-wide bg-black text-white text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 mb-4 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-green-600"
-        >
-          Checkout
-        </button>
+        <Link href="/checkout">
+          <button
+            className="btn btn-wide bg-black text-white text-lg hover:bg-green-700 hover:scale-105 transition-transform duration-300 mb-4 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-green-600"
+          >
+            Checkout
+          </button>
+        </Link>
       )}
 
       {cartItemsData.cartItems.length === 0 ? (
