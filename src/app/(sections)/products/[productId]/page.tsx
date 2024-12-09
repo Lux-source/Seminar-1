@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import { getProductById } from '@/lib/handlers';
 import { getSession } from '@/lib/auth';
 import Link from 'next/link';
+import Image from 'next/image';
 import AddToCartButton from '@/components/addToCartButton';
 import CartItemCounter from '@/components/CartItemCounter';
 
@@ -28,7 +29,7 @@ export default async function Product({
       {/* Product Image */}
       <div className="mb-8 flex w-full justify-center md:mb-0 md:w-1/2">
         {product.img && (
-          <img
+          <Image
             src={product.img}
             alt={product.name}
             className="w-full max-w-sm object-contain dark:rounded-lg dark:bg-gray-800"

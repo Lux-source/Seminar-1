@@ -1,6 +1,7 @@
 import { Product } from '@/models/Product'
 import { Types } from 'mongoose'
 import Link from 'next/link'
+import Image from 'next/image';
 
 interface ProductTileProps {
   product: Product & { _id: Types.ObjectId }
@@ -13,8 +14,8 @@ export default function ProductTile({ product }: ProductTileProps) {
       className="group flex flex-col items-center text-center transform transition-transform duration-300 hover:scale-105"
     >
       <div className="aspect-h-1 aspect-w-2 w-full overflow-hidden rounded-lg bg-white dark:bg-gray-700">
-      <img
-          src={product.img}
+      <Image
+          src={product.img || 'public/img/big-bang-integral-time-onlytitanium-38-mm-soldier.png'}
           alt={product.name}
           className="h-full w-full object-cover object-center group-hover:opacity-95"
         />

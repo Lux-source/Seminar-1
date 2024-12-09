@@ -6,6 +6,7 @@ import NavbarButton from '@/components/NavbarButton';
 import Link from 'next/link';
 import { getSession } from '@/lib/auth';
 import NavbarCartButton from './NavbarCartButton';
+import Image from 'next/image';
 import NavbarSignOutButton from '@/components/NavbarSignOutButton';
 import { ThemeSwitcher } from './ThemeSwitcher';
 
@@ -22,7 +23,7 @@ export default async function Navbar(): Promise<JSX.Element> {
               className="flex flex-shrink-0 items-center space-x-4 text-gray-300 hover:text-gray-100 dark:text-gray-300 dark:hover:text-gray-100"
               href="/"
             >
-              <img
+              <Image
                 className="block h-8 w-auto"
                 src="/img/logo.svg"
                 alt="Eterna logo"

@@ -1,10 +1,11 @@
 import SignUpForm from '@/components/SignUpForm';
+import Image from 'next/image';
 
 export default function Signup() {
   return (
     <div className="mx-auto max-w-3xl rounded-lg bg-white p-4 shadow-md dark:bg-gray-900 sm:p-6 lg:p-8">
       <div className="mx-auto w-full max-w-sm text-center">
-      <img
+      <Image
           className='mx-auto h-10 w-auto'
           src='/img/logo.svg'
           alt='GameShop logo'

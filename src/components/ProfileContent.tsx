@@ -1,6 +1,15 @@
 'use client';
 
-export default function ProfileContent({ user, orders }) {
+import { GetUserResponse } from '@/lib/handlers';
+import { GetUserOrdersResponse } from '@/lib/handlers';
+
+export default function ProfileContent({
+  user,
+  orders,
+}: {
+  user: GetUserResponse;
+  orders: GetUserOrdersResponse['orders'];
+}) {
   return (
     <div className="container mx-auto p-6">
       <h3 className="mb-8 text-center text-4xl font-bold text-gray-900 dark:text-gray-100">
@@ -67,7 +76,7 @@ export default function ProfileContent({ user, orders }) {
 
                   return (
                     <tr
-                      key={order._id}
+                    key={order._id.toString()}
                       className="border-b border-gray-300 dark:border-gray-700"
                     >
                       <td className="px-4 py-2">{order._id.toString()}</td>

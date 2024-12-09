@@ -49,8 +49,7 @@ export default function NavbarCartButton({
 
   return (
     <Link href={href} className="relative">
-      {children /* Render children inside the button */}
-      <div className="relative inline-flex items-center">
+      <div className="relative inline-flex items-center" style={{ paddingTop: '10px' }}>
         <svg
           fill="none"
           viewBox="0 0 24 24"
