@@ -3,6 +3,7 @@ import { getUserCart } from '@/lib/handlers'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import mongoose from 'mongoose'
+import CheckOutForm from '@/components/CheckOutForm';
 
 export default async function CheckoutPage() {
   const session = await getSession()
@@ -15,10 +16,10 @@ export default async function CheckoutPage() {
   const totalPrice = cartItems.reduce((total, item) => {
     if (item.product instanceof mongoose.Types.ObjectId) {
       // Not populated
-      return total
+      return total;
     } else {
       // Populated
-      return total + item.product.price * item.qty
+      return total + item.product.price * item.qty;
     }
   }, 0)
 
@@ -85,78 +86,7 @@ export default async function CheckoutPage() {
           </div>
 
           {/* Checkout Form */}
-          <form className='space-y-4'>
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-300">
-          Shipping and Payment Information
-            </h3>
-
-            {/* Address Input */}
-            <div>
-              <label
-                htmlFor='address'
-                className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-              >
-                Shipping Address
-              </label>
-              <input
-                id='address'
-                name='address'
-                type='text'
-                required
-                className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-          />
-            </div>
-
-            {/* Card Holder and Card Number Inputs */}
-            <div className='md:flex md:space-x-4'>
-              <div className='md:flex-1'>
-                <label
-                  htmlFor='cardHolder'
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-                >
-                  Card Holder
-                </label>
-                <input
-                  id='cardHolder'
-                  name='cardHolder'
-                  type='text'
-                  required
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-            />
-              </div>
-
-              <div className='mt-4 md:mt-0 md:flex-1'>
-                <label
-                  htmlFor='cardNumber'
-                  className="block text-sm font-medium text-gray-700 dark:text-gray-300"
-            >
-                  Card Number
-                </label>
-                <input
-                  id='cardNumber'
-                  name='cardNumber'
-                  type='text'
-                  required
-                  maxLength={16}
-                  pattern='\d{16}'
-                  className="mt-1 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
-            />
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <button
-              type='button'
-              disabled={!cartItems.length}
-              className={`w-full rounded-md px-4 py-2 font-medium text-white shadow-sm ${
-                cartItems.length
-                ? 'bg-green-700 hover:bg-green-600 focus:ring-indigo-500 dark:bg-indigo-500 dark:hover:bg-indigo-600'
-                : 'cursor-not-allowed bg-gray-400 dark:bg-gray-600'
-              }`}
-            >
-              Purchase
-            </button>
-          </form>
+          <CheckOutForm userId={session.userId} cartItemsLength={cartItems.length} />
         </>
       ) : (
         <p className="text-center text-gray-500 dark:text-gray-400">
