@@ -18,16 +18,16 @@ export default function SignUpForm() {
 
   const [error, setError] = useState('');
 
-  // Handle input changes
+  // input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // Handle form submission
+  // form submit
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(''); // Clear errors
+    setError(''); // limpia errors
 
     try {
       const response = await fetch('/api/users', {
@@ -49,7 +49,6 @@ export default function SignUpForm() {
 
   return (
     <form className="group space-y-6" onSubmit={handleSubmit} noValidate>
-      {/* Name */}
       <div>
         <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Name
@@ -65,7 +64,6 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Surname */}
       <div>
         <label htmlFor="surname" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Surname
@@ -81,7 +79,6 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Email */}
       <div>
         <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Email
@@ -97,7 +94,6 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Password */}
       <div>
         <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Password
@@ -113,7 +109,6 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Birthdate */}
       <div>
         <label htmlFor="birthdate" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Birthdate
@@ -129,7 +124,6 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Address */}
       <div>
         <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900 dark:text-gray-300">
           Address
@@ -145,14 +139,12 @@ export default function SignUpForm() {
         />
       </div>
 
-      {/* Error Message */}
       {error && (
         <p className="text-sm text-red-600 dark:text-red-400">
           {error}
         </p>
       )}
 
-      {/* Submit Button */}
       <div>
         <button
           type="submit"

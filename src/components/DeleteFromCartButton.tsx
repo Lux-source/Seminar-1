@@ -1,12 +1,15 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
+
 interface DeleteFromCartButtonProps {
   userId: string;
   productId: string;
-  onDeleteSuccess?: () => void; // Callback opcional para manejar la actualización tras eliminar
+  onDeleteSuccess?: () => void; 
 }
 
 export default function DeleteFromCartButton({ userId, productId, onDeleteSuccess }: DeleteFromCartButtonProps) {
+  const router = useRouter();
   const handleDelete = async () => {
     try {
       const response = await fetch(`/api/users/${userId}/cart/${productId}`, {
@@ -15,7 +18,8 @@ export default function DeleteFromCartButton({ userId, productId, onDeleteSucces
 
       if (response.ok) {
         alert('Product removed from cart successfully!');
-        onDeleteSuccess?.(); // Llama al callback si se proporciona (e.g., para refrescar el carrito)
+        onDeleteSuccess?.(); // Llama al callback si se proporciona
+        router.refresh();
       } else {
         const data = await response.json();
         alert(`Failed to remove product: ${data.message}`);
