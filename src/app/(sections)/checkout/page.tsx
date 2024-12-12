@@ -40,10 +40,10 @@ export default async function CheckoutPage() {
               <table className="w-full text-left text-sm min-w-[600px]">
                 <thead>
                   <tr className="border-b dark:border-gray-700">
-                    <th className="py-2">Product Name</th>
-                    <th className="py-2 text-right">Quantity</th>
-                    <th className="py-2 text-right">Price</th>
-                    <th className="py-2 text-right">Total</th>
+                    <th className="py-2 text-gray-700 dark:text-gray-300">Product Name</th>
+                    <th className="py-2 text-right text-gray-700 dark:text-gray-300">Quantity</th>
+                    <th className="py-2 text-right text-gray-700 dark:text-gray-300">Price</th>
+                    <th className="py-2 text-right text-gray-700 dark:text-gray-300">Total</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -54,7 +54,7 @@ export default async function CheckoutPage() {
                     return (
                       <tr
                         key={productWithId._id.toString()}
-                        className="border-b dark:border-gray-700"
+                        className="border-b border-gray-300 dark:border-gray-700"
                       >
                         <td className="py-2">
                           <Link
@@ -64,14 +64,14 @@ export default async function CheckoutPage() {
                             {item.product.name}
                           </Link>
                         </td>
-                        <td className="py-2 text-right">{item.qty}</td>
-                        <td className="py-2 text-right">
+                        <td className="py-2 text-right text-gray-700 dark:text-gray-300">{item.qty}</td>
+                        <td className="py-2 text-right text-gray-700 dark:text-gray-300">
                           {new Intl.NumberFormat('en-US', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
                           }).format(item.product.price) + ' €'}
                         </td>
-                        <td className="py-2 text-right">
+                        <td className="py-2 text-right text-gray-700 dark:text-gray-300">
                           {new Intl.NumberFormat('en-US', {
                             minimumFractionDigits: 2,
                             maximumFractionDigits: 2,
