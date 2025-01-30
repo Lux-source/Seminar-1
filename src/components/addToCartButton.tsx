@@ -1,116 +1,41 @@
 'use client';
 
-import { useState } from 'react';
-
 interface AddToCartButtonProps {
   productId: string;
   userId: string;
+  quantity: number; // Cantidad obtenida del estado compartido
 }
 
-export default function AddToCartButton({ productId, userId }: AddToCartButtonProps) {
-  const [quantity, setQuantity] = useState(1);
-
+export default function AddToCartButton({ productId, userId, quantity }: AddToCartButtonProps) {
   const handleAddToCart = async () => {
-    const response = await fetch(`/api/users/${userId}/cart`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productId: productId,
-        qty: quantity,
-      }),
-    });
+    try {
+      const response = await fetch(`/api/users/${userId}/cart`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          productId,
+          qty: quantity, // Usamos la cantidad proporcionada por la prop
+        }),
+      });
 
-    if (response.ok) {
-      alert('Product added to cart successfully!');
-    } else {
-      alert('Failed to add product to cart.');
+      if (response.ok) {
+        alert('Product added to cart successfully!');
+      } else {
+        alert('Failed to add product to cart.');
+      }
+    } catch (error) {
+      console.error('Error adding product to cart:', error);
     }
   };
 
   return (
-    <div className="flex flex-col items-center">
-      {/* Label for Quantity */}
-      <div className="max-w-xs mx-auto mb-3">
-        <label
-          htmlFor="quantity-input"
-          className="block mb-2 text-sm font-medium text-gray-900 dark:text-gray-100"
-        >
-          Choose quantity:
-        </label>
-
-        {/* Quantity Selector */}
-        <div className="relative inline-flex items-center max-w-[8rem]">
-          <button
-            type="button"
-            onClick={() => setQuantity((prev) => Math.max(prev - 1, 1))}
-            className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-s-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-          >
-            <svg
-              className="w-3 h-3 text-gray-900 dark:text-gray-100"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 18 2"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M1 1h16"
-              />
-            </svg>
-          </button>
-          <input
-            type="number"
-            id="quantity-input"
-            value={quantity}
-            onChange={(e) => setQuantity(Number(e.target.value))}
-            min="1"
-            max="50"
-            className="bg-gray-50 border-x-0 border-gray-300 h-11 text-center text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full py-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-gray-100"
-            style={{ appearance: 'textfield' }}
-            required
-          />
-          <button
-            type="button"
-            onClick={() => setQuantity((prev) => Math.min(prev + 1, 50))}
-            className="bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 dark:border-gray-600 hover:bg-gray-200 border border-gray-300 rounded-e-lg p-3 h-11 focus:ring-gray-100 dark:focus:ring-gray-700 focus:ring-2 focus:outline-none"
-          >
-            <svg
-              className="w-3 h-3 text-gray-900 dark:text-gray-100"
-              aria-hidden="true"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 18 18"
-            >
-              <path
-                stroke="currentColor"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M9 1v16M1 9h16"
-              />
-            </svg>
-          </button>
-        </div>
-        <p
-          id="helper-text-explanation"
-          className="mt-2 text-sm text-gray-500 dark:text-gray-400"
-        >
-          Please select a quantity between 1 and 50.
-        </p>
-      </div>
-
-      {/* Add to Cart Button */}
-      <button
-        onClick={handleAddToCart}
-        className="btn btn-block bg-black text-base-100 px-auto dark:bg-gray-800 dark:text-gray-100"
-      >
-        Add to Cart
-      </button>
-    </div>
+    <button
+      onClick={handleAddToCart}
+      className="mt-4 w-full bg-black text-white font-bold py-3 rounded-lg hover:bg-green-700 dark:bg-gray-700 dark:hover:bg-gray-600 dark:text-gray-100 transition duration-300"
+    >
+      Add to Cart
+    </button>
   );
 }

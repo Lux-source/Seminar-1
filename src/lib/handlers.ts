@@ -5,24 +5,41 @@ import connect from '@/lib/mongoose';
 import { Types } from 'mongoose';
 import bcrypt from 'bcrypt'
 
-export interface GetOrderResponse{
-  orders: ( Order | { _id:  Types.ObjectId })[];
+export interface PopulatedOrder extends Order {
+  _id: Types.ObjectId;
+  userId: Types.ObjectId; // Ensure userId is typed correctly
+  orderItems: (OrderItem & { product: Types.ObjectId })[]; // Adjust if populated
 }
 
-export async function getOrders():Promise<GetOrderResponse>{
+export interface GetOrdersResponse {
+  orders: PopulatedOrder[];
+}
+
+export async function getOrders(): Promise<GetOrdersResponse> {
   await connect();
-  
+
   const orders = await Orders.find()
     .populate('user')
-    .populate('products.product')
-    .exec();
-  
-  return {
-    orders,
-  };
+    .populate({
+      path: 'orderItems.product',
+      select: 'name price img description',
+    });
 
+  const transformedOrders = orders.map((order) => ({
+    _id: order._id,
+    userId: order.userId,
+    orderItems: order.orderItems.map((item) => ({
+      product: item.product,
+      qty: item.qty,
+      price: item.price,
+    })),
+    address: order.address,
+    date: order.date,
+    cardHolder: order.cardHolder,
+    cardNumber: order.cardNumber,
+  })) as PopulatedOrder[];
 
-  
+  return { orders: transformedOrders };
 }
 
 
@@ -191,20 +208,21 @@ export async function createOrder(
 ): Promise<CreateOrderResponse | null> {
   await connect();
 
-  const user = await Users.findById(userId).populate({
-    path: 'cartItems.product',
-    select: 'name price',
-  });
+  // Use a typed populate to define the structure of cartItems after population
+  const user = await Users.findById(userId).populate<{
+    cartItems: { product: Product; qty: number }[];
+  }>('cartItems.product');
 
+  // Check if user exists and cart is not empty
   if (!user || user.cartItems.length === 0) {
     return null;
   }
 
   // Transform cart items into order items with price
   const orderItems: OrderItem[] = user.cartItems.map((cartItem) => ({
-    product: cartItem.product._id,
+    product: (cartItem.product as Product & { _id: Types.ObjectId })._id, // Cast product to include _id
     qty: cartItem.qty,
-    price: cartItem.product.price, // Include price at the time of purchase
+    price: (cartItem.product as Product & { _id: Types.ObjectId }).price, // Cast for TypeScript safety
   }));
 
   // Create a new order
@@ -276,10 +294,16 @@ export async function getUserOrders(
 ): Promise<GetUserOrdersResponse | null> {
   await connect();
 
-  const user = await Users.findById(userId).populate({
-    path: 'orders',
-    select: '-__v',
-  });
+  const user = await Users.findById(userId).populate<{
+    orders: {
+      _id: Types.ObjectId;
+      address: string;
+      date: Date;
+      cardHolder: string;
+      cardNumber: string;
+      orderItems: OrderItem[];
+    }[];
+  }>('orders');
 
   if (!user) {
     return null;
@@ -335,7 +359,7 @@ export async function updateCartItem(
     select: 'name price img description',
   });
 
-  return { cartItems: user.cartItems, newItem };
+  return { cartItems: user.cartItems as unknown as GetUserCartResponse['cartItems'], newItem };
 }
 
 export async function deleteCartItem(
@@ -362,7 +386,7 @@ export async function deleteCartItem(
     select: 'name price img description',
   });
 
-  return { cartItems: user.cartItems };
+  return { cartItems: user.cartItems as unknown as GetUserCartResponse['cartItems'] };
 }
 
 export interface GetProductResponse extends Product {

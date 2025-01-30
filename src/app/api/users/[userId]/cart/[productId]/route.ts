@@ -105,7 +105,7 @@ if (session.userId !== userId) {
 
   //Return updated cart
   return NextResponse.json(
-    { cartItems: user.cartItems, newItem},
+    { cartItems: user.cartItems as unknown as GetUserCartResponse['cartItems'], newItem},
     {
       status: newItem ? 201 : 200,
       headers: newItem
